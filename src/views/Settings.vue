@@ -1,5 +1,6 @@
 <template>
   <div class="view-settings">
+    <div class="view-settings__title">Settings</div>
     <div class="settings-box">
       <div class="settings-box__header">
         <div class="settings-box__nav">
@@ -12,7 +13,7 @@
       </div>
       <div class="settings-box__content">
         <div class="working-hours">
-          <div class="working-hours__item">
+          <div class="working-hours__item working-hours__item_schedule">
             <div class="working-hours__col-left">
               <div class="working-hours__label">Schedule</div>
             </div>
@@ -31,12 +32,40 @@
           <div class="working-hours__item">
             <div class="working-hours__col-left">
               <div class="input-checkbox">
-                <div class="input-checkbox__switch"></div>
+                <div class="input-checkbox__switch">
+                  <svg>
+                    <use xlink:href="#icon-checkbox"/>
+                  </svg>
+                </div>
                 <div class="input-checkbox__label">Monday</div>
               </div>
             </div>
             <div class="working-hours__col-right">
-              <div class="time-controls">
+              <div class="working-hours__time-controls time-controls">
+                <div class="time-controls__start">08:00</div>
+                <div class="time-controls__spacer"></div>
+                <div class="time-controls__end">17:00</div>
+              </div>
+              <div class="input-slider js-slider">
+                <div class="input-slider__value js-slider-value"></div>
+                <div class="input-slider__control-left js-slider-control js-slider-control-left" data-value="60"></div>
+                <div class="input-slider__control-right js-slider-control js-slider-control-right" data-value="720"></div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="working-hours__item">
+            <div class="working-hours__col-left">
+              <div class="input-checkbox">
+                <div class="input-checkbox__switch">
+                  <svg>
+                    <use xlink:href="#icon-checkbox"/>
+                  </svg>
+                </div>
+                <div class="input-checkbox__label">Monday</div>
+              </div>
+            </div>
+            <div class="working-hours__col-right">
+              <div class="working-hours__time-controls time-controls">
                 <div class="time-controls__start">08:00</div>
                 <div class="time-controls__spacer"></div>
                 <div class="time-controls__end">17:00</div>
@@ -47,7 +76,7 @@
                 <div class="input-slider__control-right js-slider-control"></div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="settings-box__footer"></div>
@@ -65,6 +94,17 @@ export default {
 </script>
 
 <style lang="scss">
+
+.view-settings{
+  &__title{
+    margin: 0 0 20px;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 37px;
+    color: var(--dark-color);
+  }
+}
+
 .time-controls {
   display: flex;
   align-items: center;
@@ -101,7 +141,9 @@ export default {
   &__value {
     background-color: var(--sanguina-color);
     height: 8px;
-    width: 50%;
+    width: 30%;
+    position: relative;
+    left: 30%;
   }
 
   &__control-left,
@@ -112,7 +154,8 @@ export default {
     height: 20px;
     width: 20px;
     position: absolute;
-    top: 0;
+    top: -8px;
+    transform: translateX(-50%);
   }
 }
 
@@ -121,11 +164,20 @@ export default {
   align-items: center;
 
   &__switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
     border-radius: 4px;
     background-color: var(--lime-color);
     width: 18px;
     height: 18px;
+
+    svg{
+      fill: var(--white-color);
+      width: 8px;
+      height: 6px;
+    }
   }
 
   &__label {
@@ -213,6 +265,8 @@ export default {
 }
 
 .working-hours {
+  overflow: hidden;
+
   &__item {
     display: flex;
     align-items: center;
@@ -220,16 +274,26 @@ export default {
 
   &__col-left {
     width: 200px;
+    position: relative;
   }
 
   &__col-right {
     width: calc(100% - 200px);
+    position: relative;
   }
 
   &__label {
     font-size: 15px;
     line-height: 22px;
     color: var(--gray-color);
+  }
+
+  &__item{
+    margin: 42px 0;
+    
+    &_schedule{
+      margin: 26px 0 16px;
+    }
   }
 
   &__schedule {
@@ -248,6 +312,13 @@ export default {
     background-color: var(--light-gray-color);
     width: 100%;
     height: 1px;
+  }
+
+  &__time-controls{
+    position: absolute;
+    top: -36px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 </style>

@@ -87,7 +87,7 @@ export default {
   height: 100vh;
 
   &__nav{
-    margin: 78px 0 0;
+    margin: 64px 0 0;
   }
 
   &__nav-item{

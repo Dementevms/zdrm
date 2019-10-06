@@ -19,6 +19,27 @@ export default class Slider {
   init() {
     this.control = null;
     this.bind();
+
+    const items = document.querySelectorAll('.js-slider');
+    items.forEach(item => {
+      const leftControl = item.querySelector('.js-slider-control-left');
+      const rightControl = item.querySelector('.js-slider-control-right');
+      const leftControlValue = this.getPercent(leftControl.dataset.value);
+      const rightControlValue = this.getPercent(rightControl.dataset.value);
+      leftControl.style.left = `${leftControlValue}%`;
+      rightControl.style.left = `${rightControlValue}%`;
+
+      const valueWidth = rightControlValue - leftControlValue;
+      const value = item.querySelector('.js-slider-value');
+      value.style.left = `${leftControlValue}%`;
+      value.style.width = `${valueWidth}%`;
+    });
+
+  }
+
+  getPercent(minuts){
+    const result = parseInt(100 / (1440 / minuts));
+    return result; 
   }
 
   bind() {
