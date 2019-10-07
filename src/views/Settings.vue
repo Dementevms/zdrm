@@ -47,9 +47,9 @@
                 <div class="time-controls__end">17:00</div>
               </div>
               <div class="input-slider js-slider">
-                <div class="input-slider__value js-slider-value"></div>
-                <div class="input-slider__control-left js-slider-control js-slider-control-left" data-value="60"></div>
-                <div class="input-slider__control-right js-slider-control js-slider-control-right" data-value="720"></div>
+                <div class="input-slider__bar js-slider-bar"></div>
+                <div class="input-slider__control-left js-slider-control-left" data-minuts="60"></div>
+                <div class="input-slider__control-right js-slider-control-right" data-minuts="720"></div>
               </div>
             </div>
           </div>
@@ -138,12 +138,10 @@ export default {
   height: 8px;
   position: relative;
 
-  &__value {
+  &__bar {
     background-color: var(--sanguina-color);
     height: 8px;
-    width: 30%;
-    position: relative;
-    left: 30%;
+    position: absolute;
   }
 
   &__control-left,
