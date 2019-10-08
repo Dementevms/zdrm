@@ -1,53 +1,55 @@
 /* eslint-disable no-unused-vars */
 export default class Slider {
   constructor() {
-    this.config = {
-      slider: ".js-slider",
-      control: ".js-slider-control",
-      controlLeft: ".js-slider-control[data-type=left]",
-      controlRight: ".js-slider-control[data-type=right]",
-      bar: ".js-slider-bar"
-    };
-    this.eventSetTime = new Event("inputSliderSetTime");
-    this.slider = document.querySelector(this.config.slider);
-    if (this.slider) {
-      this.init();
-    }
+    // this.config = {
+    //   slider: ".js-slider",
+    //   control: ".js-slider-control",
+    //   controlLeft: ".js-slider-control[data-type=left]",
+    //   controlRight: ".js-slider-control[data-type=right]",
+    //   bar: ".js-slider-bar"
+    // };
+    // this.eventSetTime = new Event("inputSliderSetTime");
+    // this.slider = document.querySelector(this.config.slider);
+    // if (this.slider) {
+    //   this.init();
+    // }
   }
 
-  init() {
-    this.control = null;
-    this.initSliders();
-    this.bind();
-  }
+  // init() {
+  //   this.control = null;
+  //   this.initSliders();
+  //   this.bind();
+  // }
 
-  initSliders() {
-    document.querySelectorAll(this.config.slider).forEach(item => {
-      this.initControls(item);
-      this.initBar(item);
-    });
-  }
+  // initSliders() {
+  //   document.querySelectorAll(this.config.slider).forEach(item => {
+  //     this.initControls(item);
+  //     this.initBar(item);
+  //   });
+  // }
 
-  initControls(slider) {
-    const leftControl = slider.querySelector(this.config.controlLeft);
-    const rightControl = slider.querySelector(this.config.controlRight);
+  initControls(slider, config) {
+    const leftControl = slider.querySelector(config.controlLeft);
+    const rightControl = slider.querySelector(config.controlRight);
 
     const leftControlMinuts = leftControl.dataset.minuts;
     const rightControlMinuts = rightControl.dataset.minuts;
 
-    const left = (leftControlMinuts * this.slider.clientWidth) / 1440;
-    const right = (rightControlMinuts * this.slider.clientWidth) / 1440;
+    const left = (leftControlMinuts * slider.clientWidth) / 1440;
+    const right = (rightControlMinuts * slider.clientWidth) / 1440;
 
     leftControl.style.left = `${left}px`;
     rightControl.style.left = `${right}px`;
 
-    this.setTime(slider, leftControl, rightControl);
+    return slider;
+
+    // this.setTime(slider, leftControl, rightControl);
   }
 
-  initBar(slider) {
-    const bar = slider.querySelector(this.config.bar);
-    const leftControl = slider.querySelector(this.config.controlLeft);
-    const rightControl = slider.querySelector(this.config.controlRight);
+  initBar(slider, config) {
+    const bar = slider.querySelector(config.bar);
+    const leftControl = slider.querySelector(config.controlLeft);
+    const rightControl = slider.querySelector(config.controlRight);
     this.setBar(slider, bar, leftControl, rightControl);
   }
 
