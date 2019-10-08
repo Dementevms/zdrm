@@ -1,3 +1,185 @@
+/* eslint-disable no-unused-vars */
+export default class Slider {
+  constructor() {
+    this.config = {
+      slider: ".js-slider",
+      control: ".js-slider-control",
+      controlLeft: ".js-slider-control[data-type=left]",
+      controlRight: ".js-slider-control[data-type=right]",
+      bar: ".js-slider-bar"
+    };
+    this.eventSetTime = new Event("inputSliderSetTime");
+    this.slider = document.querySelector(this.config.slider);
+    if (this.slider) {
+      this.init();
+    }
+  }
+
+  init() {
+    this.control = null;
+    this.initSliders();
+    this.bind();
+  }
+
+  initSliders() {
+    document.querySelectorAll(this.config.slider).forEach(item => {
+      this.initControls(item);
+      this.initBar(item);
+    });
+  }
+
+  initControls(slider) {
+    const leftControl = slider.querySelector(this.config.controlLeft);
+    const rightControl = slider.querySelector(this.config.controlRight);
+
+    const leftControlMinuts = leftControl.dataset.minuts;
+    const rightControlMinuts = rightControl.dataset.minuts;
+
+    const left = (leftControlMinuts * this.slider.clientWidth) / 1440;
+    const right = (rightControlMinuts * this.slider.clientWidth) / 1440;
+
+    leftControl.style.left = `${left}px`;
+    rightControl.style.left = `${right}px`;
+
+    this.setTime(slider, leftControl, rightControl);
+  }
+
+  initBar(slider) {
+    const bar = slider.querySelector(this.config.bar);
+    const leftControl = slider.querySelector(this.config.controlLeft);
+    const rightControl = slider.querySelector(this.config.controlRight);
+    this.setBar(slider, bar, leftControl, rightControl);
+  }
+
+  bind() {
+    document.addEventListener(
+      "mousedown",
+      e => {
+        if (e.target.closest(this.config.control)) {
+          this.clickControl(e);
+        }
+        if (
+          e.target.closest(this.config.slider) &&
+          !e.target.closest(this.config.control)
+        ) {
+          this.clickBar(e);
+        }
+      },
+      false
+    );
+    document.addEventListener(
+      "mousemove",
+      e => {
+        if (this.control) {
+          this.move(e);
+        }
+      },
+      false
+    );
+    document.addEventListener(
+      "mouseup",
+      () => {
+        if (this.slider) {
+          this.setTime(this.slider, this.controlLeft, this.controlRight);
+          this.reset();
+        }
+      },
+      false
+    );
+  }
+
+  clickControl(e) {
+    this.setSlider(e);
+    if (e.target.closest(this.config.controlLeft)) {
+      this.control = this.controlLeft;
+    }
+    if (e.target.closest(this.config.controlRight)) {
+      this.control = this.controlRight;
+    }
+  }
+
+  clickBar(e) {
+    this.setSlider(e);
+    const x = e.clientX - this.slider.clientX;
+    if (x < this.slider.clientWidth / 2) {
+      this.control = this.controlLeft;
+      this.setControl(x);
+    } else {
+      this.control = this.controlRight;
+      this.setControl(x);
+    }
+    this.setBar(this.slider, this.bar, this.controlLeft, this.controlRight);
+  }
+
+  setSlider(e) {
+    this.slider = e.target.closest(this.config.slider);
+    this.slider.clientX = this.slider.getBoundingClientRect().left;
+
+    this.controlLeft = this.slider.querySelector(this.config.controlLeft);
+    this.controlRight = this.slider.querySelector(this.config.controlRight);
+
+    this.bar = this.slider.querySelector(this.config.bar);
+  }
+
+  setControl(x) {
+    if (x <= 0) {
+      x = 0;
+    }
+    if (x >= this.slider.clientWidth) {
+      x = this.slider.clientWidth;
+    }
+    if (this.control === this.controlLeft) {
+      const left = parseInt(this.controlRight.style.left);
+      if (x >= left) {
+        x = left;
+      }
+    }
+    if (this.control === this.controlRight) {
+      const left = parseInt(this.controlLeft.style.left);
+      if (x <= left) {
+        x = left;
+      }
+    }
+    this.control.style.left = `${x}px`;
+  }
+
+  setBar(slider, bar, controlLeft, controlRight) {
+    const left = parseInt(controlLeft.style.left);
+    const right = slider.clientWidth - parseInt(controlRight.style.left);
+    bar.style.left = `${left}px`;
+    bar.style.right = `${right}px`;
+  }
+
+  setTime(slider, controlLeft, controlRight) {
+    const number = 1440 / slider.clientWidth;
+    const start = parseInt(controlLeft.style.left) * number;
+    const end = parseInt(controlRight.style.left) * number;
+    slider.time = {
+      start,
+      end
+    };
+    this.slider.dispatchEvent(this.eventSetTime);
+  }
+
+  move(e) {
+    const x = e.clientX - this.slider.clientX;
+    this.setControl(x);
+    this.control.style.left = `${x}px`;
+    this.setBar(this.slider, this.bar, this.controlLeft, this.controlRight);
+  }
+
+  convert(minuts) {
+    const h = parseInt(minuts / 60);
+    const m = parseInt(60 / (100 / ((minuts / 60 - h) * 100)));
+    return { h, m };
+  }
+
+  reset() {
+    this.slider = null;
+    this.control = null;
+  }
+}
+
 const throttle = (fn, ms) => {
   let isThrottle = false;
   let saveArgs = null;
@@ -21,195 +203,3 @@ const throttle = (fn, ms) => {
   };
   return wrapper;
 };
-
-export default class Slider {
-  constructor() {
-    this.slider = document.querySelector(".js-slider");
-    if (this.slider) {
-      this.init();
-    }
-  }
-
-  init() {
-    this.control = null;
-    this.initSliders();
-    this.bind();
-  }
-
-  initSliders() {
-    document.querySelectorAll(".js-slider").forEach(item => {
-      this.initControls(item);
-      this.initBar(item);
-    });
-  }
-
-  initControls(slider) {
-    const leftControl = slider.querySelector(".js-slider-control-left");
-    const rightControl = slider.querySelector(".js-slider-control-right");
-
-    const leftControlMinuts = leftControl.dataset.minuts;
-    const rightControlMinuts = rightControl.dataset.minuts;
-
-    const left = (leftControlMinuts * this.slider.clientWidth) / 1440;
-    const right = (rightControlMinuts * this.slider.clientWidth) / 1440;
-
-    leftControl.style.left = `${left}px`;
-    rightControl.style.left = `${right}px`;
-  }
-
-  initBar(slider) {
-    const bar = slider.querySelector(".js-slider-bar");
-    const leftControl = slider.querySelector(".js-slider-control-left");
-    const rightControl = slider.querySelector(".js-slider-control-right");
-    this.setBar(slider, bar, leftControl, rightControl);
-  }
-
-  bind() {
-    document.addEventListener(
-      "mousedown",
-      e => {
-        if (
-          e.target.closest(".js-slider-control-left") ||
-          e.target.closest(".js-slider-control-right")
-        ) {
-          this.clickControl(e);
-        }
-        // if (e.target.closest(".js-slider")) {
-        //   this.slider = e.target.closest(".js-slider");
-        //   this.click(e);
-        // }
-      },
-      false
-    );
-    // const move = throttle(e => this.move(e), 60);
-    document.addEventListener(
-      "mousemove",
-      e => {
-        if (this.control) {
-          this.move(e);
-        }
-      },
-      false
-    );
-    document.addEventListener(
-      "mouseup",
-      () => {
-        this.control = null;
-      },
-      false
-    );
-  }
-
-  clickControl(e) {
-    console.log("initControl");
-    this.slider = e.target.closest(".js-slider");
-    this.slider.clientX = this.slider.getBoundingClientRect().left;
-
-    this.controlLeft = this.slider.querySelector(".js-slider-control-left");
-    this.controlRight = this.slider.querySelector(".js-slider-control-right");
-
-    if (e.target.closest(".js-slider-control-left")) {
-      this.control = this.controlLeft;
-    }
-    if (e.target.closest(".js-slider-control-right")) {
-      this.control = this.controlRight;
-    }
-
-    console.log("this.control", this.control);
-
-    this.bar = this.slider.querySelector(".js-slider-bar");
-  }
-
-  // click(e) {
-  //   const x = e.clientX - this.slider.getBoundingClientRect().left;
-  //   const control = this.slider.querySelector(".js-slider-control");
-  //   console.log("this.slider.clientWidth", this.slider.clientWidth);
-  //   console.log("x", x);
-  //   const minuts = 1440;
-  //   const percent = 100 / (this.slider.clientWidth / x);
-  //   const result = minuts / (100 / percent);
-  //   const time = this.getTime(result);
-  //   console.log("time", time);
-  //   control.style.left = `${x}px`;
-  // }
-
-  move(e) {
-    const x = e.clientX - this.slider.clientX;
-    this.control.style.left = `${x}px`;
-    this.setBar(this.slider, this.bar, this.controlLeft, this.controlRight);
-  }
-
-  setBar(slider, bar, controlLeft, controlRight) {
-    const left = parseInt(controlLeft.style.left);
-    const right = slider.clientWidth - parseInt(controlRight.style.left);
-    bar.style.left = `${left}px`;
-    bar.style.right = `${right}px`;
-  }
-
-  setTime(slider){
-
-  }
-
-  // setValue(slider, controlLeft, controlRight) {
-  //   const left = parseInt(this.controlLeft.style.left);
-  //   const right = this.slider.clientWidth - parseInt(this.controlLeft.style.left);
-  //   this.value.style.left = `${left}px`;
-  //   this.value.style.right = `${right}px`;
-  // }
-
-  // getSliderValueLeft() {
-  //   return this.getPercent(this.controlLeft.dataset.value);
-  // }
-
-  // getSliderValueWidth() {
-  //   const leftControlValue = this.getPercent(this.controlLeft.dataset.value);
-  //   const rightControlValue = this.getPercent(this.controlRight.dataset.value);
-  //   return rightControlValue - leftControlValue;
-  // }
-
-  // // setPositionValue(obj){
-  // //   const valueWidth = rightControlValue - leftControlValue;
-  // //   const value = obj.querySelector(".js-slider-value");
-  // //   value.style.left = `${leftControlValue}%`;
-  // //   value.style.width = `${valueWidth}%`;
-  // // }
-
-  // setPositionControls(obj) {
-  //   const leftControl = obj.querySelector(".js-slider-control-left");
-  //   const rightControl = obj.querySelector(".js-slider-control-right");
-  //   const leftControlValue = this.getPercent(leftControl.dataset.value);
-  //   const rightControlValue = this.getPercent(rightControl.dataset.value);
-  //   leftControl.style.left = `${leftControlValue}%`;
-  //   rightControl.style.left = `${rightControlValue}%`;
-
-  //   const valueWidth = rightControlValue - leftControlValue;
-  //   const value = obj.querySelector(".js-slider-value");
-  //   value.style.left = `${leftControlValue}%`;
-  //   value.style.width = `${valueWidth}%`;
-  // }
-
-  // setPositionControl() {}
-
-  // getTime(minuts) {
-  //   const h = parseInt(minuts / 60);
-  //   const m = parseInt(60 / (100 / ((minuts / 60 - h) * 100)));
-  //   return { h, m };
-  // }
-
-  // getPercent(minuts) {
-  //   const result = parseInt(100 / (1440 / minuts));
-  //   return result;
-  // }
-
-  // getMinuts(){
-
-  // }
-
-  // converMinutsPercents(value, revers){
-
-  // }
-
-  // convertPercentsPixels(value, revers){
-
-  // }
-}

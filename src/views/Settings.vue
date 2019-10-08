@@ -41,16 +41,17 @@
               </div>
             </div>
             <div class="working-hours__col-right">
-              <div class="working-hours__time-controls time-controls">
+              <TimeSlider :start="timeStart" :end="timeEnd"/>
+              <!-- <div class="working-hours__time-controls time-controls">
                 <div class="time-controls__start">08:00</div>
                 <div class="time-controls__spacer"></div>
                 <div class="time-controls__end">17:00</div>
               </div>
               <div class="input-slider js-slider">
                 <div class="input-slider__bar js-slider-bar"></div>
-                <div class="input-slider__control-left js-slider-control-left" data-minuts="60"></div>
-                <div class="input-slider__control-right js-slider-control-right" data-minuts="720"></div>
-              </div>
+                <div class="input-slider__control-left js-slider-control js-slider-control-left" data-type="left" data-minuts="60"></div>
+                <div class="input-slider__control-right js-slider-control js-slider-control-right" data-type="right" data-minuts="720"></div>
+              </div> -->
             </div>
           </div>
           <!-- <div class="working-hours__item">
@@ -86,9 +87,41 @@
 
 <script>
 import Slider from '@/modules/slider';
+import TimeSlider from '@/components/TimeSlider.vue';
 export default {
+  components:{
+    TimeSlider
+  },
+  data(){
+    return {
+      timeStart: 60,
+      timeEnd: 1000
+    }
+  },
   mounted(){
     const slider = new Slider();
+  },
+  methods:{
+    init(){
+      
+    },
+    initSliders(){
+      const items = document.querySelector('.js-slider');
+      item.forEach(item => {
+        
+        // document.addEventListener(
+        //   "mouseup",
+        //   () => {
+        //     if (this.slider) {
+        //       this.setTime(this.slider, this.controlLeft, this.controlRight);
+        //       this.reset();
+        //     }
+        //   },
+        //   false
+        // );
+      });
+
+    }
   }
 }
 </script>
