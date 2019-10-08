@@ -9,10 +9,8 @@
 export default {
   name: "input-slider",
   props: {
-    start: Number,
-    end: Number,
     valueControlA: Number,
-    valueControlB: Number,
+    valueControlB: Number
   },
   data() {
     return {
@@ -21,49 +19,77 @@ export default {
       controlA: null,
       controlB: null,
       bar: null,
-      config: {
-        slider: ".js-slider",
-        control: ".js-slider-control",
-        controlLeft: ".js-slider-control[data-type=left]",
-        controlRight: ".js-slider-control[data-type=right]",
-        bar: ".js-slider-bar"
-      }
+      stateControlA: null,
+      stateControlB: null,
     };
   },
   mounted() {
     this.init();
   },
+  computed: {
+    currentValueControlA() {
+      return this.stateControlA;
+    },
+    currentValueControlB() {
+      return this.stateControlB;
+    }
+  },
+  watch: {
+    currentValueControlA(value) {
+      const position = this.converPersentsToPosition(this.slider, value);
+      this.moveControl(this.slider, this.controlA, position);
+      this.updateBar(this.slider, this.controlA, this.controlB, this.bar);
+    },
+    currentValueControlB(value) {
+      const position = this.converPersentsToPosition(this.slider, value);
+      this.moveControl(this.slider, this.controlB, position);
+      this.updateBar(this.slider, this.controlA, this.controlB, this.bar);
+    }
+  },
   methods: {
     init() {
+      // console.log('this', this);
       this.slider = this.$refs.slider;
       this.slider.clientX = this.slider.getBoundingClientRect().left;
       this.controlA = this.$refs.controlA;
       this.controlB = this.$refs.controlB;
       this.bar = this.$refs.bar;
       this.bind();
+      this.setState(this.valueControlA, this.valueControlB);
     },
-    initSlider(){
-
-    },
-    initControls(slider, valueControlA, valueControlB){
-      const positionA = this.converPersentsToPosition(slider, valueControlA);
-      const positionA = this.converPersentsToPosition(slider, valueControlB);
-    },
-    bind(){
+    bind() {
       document.addEventListener(
         "mousemove",
         e => {
-          this.move(e);
+          if (this.control) {
+            this.move(e);
+          }
         },
         false
       );
       document.addEventListener(
         "mouseup",
         e => {
-          this.control = null;
+          if (this.control) {
+            this.stop();
+          }
         },
         false
       );
+    },
+    setState(valueControlA, valueControlB) {
+      this.stateControlA = valueControlA;
+      this.stateControlB = valueControlB;
+      this.$emit('set-state-slider', valueControlA);
+      // const data = {
+      //   valueControlA,
+      //   valueControlB
+      // };
+      // this.state = {
+      //   valueControlA,
+      //   valueControlB
+      // };
+      // this.$store.dispatch("inputSlider/setControlsValues", data);
     },
     setControl(name) {
       if (name === "A") {
@@ -72,6 +98,20 @@ export default {
       if (name === "B") {
         this.control = this.controlB;
       }
+    },
+    stop() {
+      this.control = null;
+      const positionControlA = parseInt(this.controlA.style.left);
+      const positionControlB = parseInt(this.controlB.style.left);
+      const valueControlA = this.converPositionToPersents(
+        this.slider,
+        positionControlA
+      );
+      const valueControlB = this.converPositionToPersents(
+        this.slider,
+        positionControlB
+      );
+      this.setState(valueControlA, valueControlB);
     },
     move(e) {
       if (this.control) {
@@ -95,14 +135,12 @@ export default {
       bar.style.left = `${left}px`;
       bar.style.right = `${right}px`;
     },
-    converPersentsToPosition(slider, persents){
-      return parseInt(slider.clientWidth * (100 / persents));
+    converPersentsToPosition(slider, persents) {
+      return parseInt(slider.clientWidth * (persents / 100));
+    },
+    converPositionToPersents(slider, position) {
+      return 100 / (slider.clientWidth / position);
     }
-
-    // setTime(){
-    //   const time = this.$refs.slider.time;
-    //   this.$store.dispatch('inputSlider/setTime', time);
-    // }
   }
 };
 </script>

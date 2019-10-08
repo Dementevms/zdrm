@@ -29,55 +29,14 @@
             </div>
           </div>
           <div class="working-hours__spacer"></div>
-          <div class="working-hours__item">
-            <div class="working-hours__col-left">
-              <div class="input-checkbox">
-                <div class="input-checkbox__switch">
-                  <svg>
-                    <use xlink:href="#icon-checkbox"/>
-                  </svg>
-                </div>
-                <div class="input-checkbox__label">Monday</div>
-              </div>
-            </div>
-            <div class="working-hours__col-right">
-              <TimeSlider :start="timeStart" :end="timeEnd"/>
-              <!-- <div class="working-hours__time-controls time-controls">
-                <div class="time-controls__start">08:00</div>
-                <div class="time-controls__spacer"></div>
-                <div class="time-controls__end">17:00</div>
-              </div>
-              <div class="input-slider js-slider">
-                <div class="input-slider__bar js-slider-bar"></div>
-                <div class="input-slider__control-left js-slider-control js-slider-control-left" data-type="left" data-minuts="60"></div>
-                <div class="input-slider__control-right js-slider-control js-slider-control-right" data-type="right" data-minuts="720"></div>
-              </div> -->
-            </div>
-          </div>
-          <!-- <div class="working-hours__item">
-            <div class="working-hours__col-left">
-              <div class="input-checkbox">
-                <div class="input-checkbox__switch">
-                  <svg>
-                    <use xlink:href="#icon-checkbox"/>
-                  </svg>
-                </div>
-                <div class="input-checkbox__label">Monday</div>
-              </div>
-            </div>
-            <div class="working-hours__col-right">
-              <div class="working-hours__time-controls time-controls">
-                <div class="time-controls__start">08:00</div>
-                <div class="time-controls__spacer"></div>
-                <div class="time-controls__end">17:00</div>
-              </div>
-              <div class="input-slider js-slider">
-                <div class="input-slider__value"></div>
-                <div class="input-slider__control-left js-slider-control"></div>
-                <div class="input-slider__control-right js-slider-control"></div>
-              </div>
-            </div>
-          </div> -->
+          <WorkingHoursItem 
+            v-for="(item, index) in items" 
+            :key="index" 
+            :title="item.title" 
+            :active="item.active" 
+            :start="item.start" 
+            :end="item.end"
+          />
         </div>
       </div>
       <div class="settings-box__footer"></div>
@@ -87,42 +46,61 @@
 
 <script>
 import Slider from '@/modules/slider';
-import TimeSlider from '@/components/TimeSlider.vue';
+// import TimeSlider from '@/components/TimeSlider.vue';
+import WorkingHoursItem from '@/components/WorkingHoursItem.vue';
+
 export default {
   components:{
-    TimeSlider
+    WorkingHoursItem
   },
   data(){
     return {
-      timeStart: 60,
-      timeEnd: 1000
+      items: [
+        {
+          title: 'Monday',
+          active: true,
+          start: 360,
+          end: 720
+        },
+        {
+          title: 'Tuesday',
+          active: true,
+          start: 60,
+          end: 960
+        },
+        {
+          title: 'Wedndesday',
+          active: true,
+          start: 270,
+          end: 1020
+        },
+        {
+          title: 'Thursday',
+          active: true,
+          start: 80,
+          end: 830
+        },
+        {
+          title: 'Friday',
+          active: true,
+          start: 360,
+          end: 1400
+        },
+        {
+          title: 'Saturday',
+          active: false,
+          start: 145,
+          end: 254
+        },
+        {
+          title: 'Sunday',
+          active: false,
+          start: 120,
+          end: 651
+        },
+      ],
     }
   },
-  mounted(){
-    const slider = new Slider();
-  },
-  methods:{
-    init(){
-      
-    },
-    initSliders(){
-      const items = document.querySelector('.js-slider');
-      item.forEach(item => {
-        
-        // document.addEventListener(
-        //   "mouseup",
-        //   () => {
-        //     if (this.slider) {
-        //       this.setTime(this.slider, this.controlLeft, this.controlRight);
-        //       this.reset();
-        //     }
-        //   },
-        //   false
-        // );
-      });
-
-    }
-  }
 }
 </script>
 
@@ -144,13 +122,15 @@ export default {
 
   &__start,
   &__end {
-    display: block;
+    display: inline-block;
     box-sizing: border-box;
     border-radius: 3px;
     border: 1px solid var(--gray-color);
-    padding: 0 8px;
+    padding: 0;
+    width: 48px;
     font-size: 13px;
     line-height: 20px;
+    text-align: center;
     color: var(--dark-color);
   }
   

@@ -7,19 +7,30 @@ export default new Vuex.Store({
   modules: {
     inputSlider: {
       namespaced: true,
-      state: {
-        time: null
+      state() {
+        return {
+          valueControlA: null,
+          valueControlB: null
+        }
       },
       mutations: {
-        setTime(state, data) {
-          state.time = data;
+        setControlsValues(state, data) {
+          state.valueControlA = data.valueControlA;
+          state.valueControlB = data.valueControlB;
+        },
+        setControlAValue(state, value) {
+          state.valueControlA = value;
         }
       },
       actions: {
-        setTime({ commit }, data) {
-          console.log('Storetime: ', data);
-          commit("setTime", data);
-        }
+        setControlsValues({ commit }, data) {
+          console.log("setControlsValues: ", data);
+          commit("setControlsValues", data);
+        },
+        setControlAValue({ commit }, value) {
+          console.log("setControlAValue: ", value);
+          commit("setControlAValue", value);
+        },
       }
     }
   },
