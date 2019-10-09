@@ -1,9 +1,9 @@
 <template>
-  <div class="working-hours__item" :class="{ 'disabled' : active === false }">
+  <div class="working-hours__item" :class="{ 'disabled' : !data.active }">
     <div class="working-hours__col-left">
       <div class="input-checkbox">
-        <div class="input-checkbox__switch">
-          <svg>
+        <div class="input-checkbox__switch" :class="{ 'disabled' : !data.active }" @click="toogleCheckBox">
+          <svg v-if="data.active">
             <use xlink:href="#icon-checkbox" />
           </svg>
         </div>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="working-hours__col-right">
-      <TimeSlider v-if="active" :start="start" :end="end" />
+      <TimeSlider v-if="data.active" :start="start" :end="end" />
     </div>
   </div>
 </template>
@@ -26,6 +26,24 @@ export default {
   },
   components:{
     TimeSlider
+  },
+  data(){
+    return {
+      data: {
+        active: null,
+      }
+    }
+  },
+  created(){
+    this.init();
+  },
+  methods: {
+    init(){
+      this.data.active = this.active;
+    },
+    toogleCheckBox(){
+      this.data.active = !this.data.active;
+    }
   },
 }
 </script>

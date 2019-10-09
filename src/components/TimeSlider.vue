@@ -1,11 +1,25 @@
 <template>
-  <div class="time-slider" v-on:set-state-slider="onMy">
-    <!-- <div class="time-slider__time-controls time-controls">
-      <input class="time-controls__start" v-bind:value="startTime" @change="change" type="text">
+  <div class="time-slider">
+    <div class="time-slider__time-controls time-controls">
+      <input
+        class="time-controls__start"
+        v-bind:value="startTime"
+        @change="changeStartTime"
+        type="text"
+      />
       <div class="time-controls__spacer"></div>
-      <input class="time-controls__start" v-bind:value="endTime" @change="change" type="text">
-    </div> -->
-    <InputSlider ref="slider" v-bind:value-control-a="valueControlA" v-bind:value-control-b="valueControlB" />
+      <input
+        class="time-controls__start"
+        v-bind:value="endTime"
+        @change="changeEndTime"
+        type="text"
+      />
+    </div>
+    <InputSlider
+      v-bind:value-control-a="valueControlA"
+      v-bind:value-control-b="valueControlB"
+      @change="changeInputSlider"
+    />
   </div>
 </template>
 
@@ -22,77 +36,108 @@ export default {
   },
   data() {
     return {
-      slider: null,
+      valueStartTime: null,
+      valueEndTime: null,
       valueControlA: null,
-      valueControlB: null,
-      startHours: null,
-      startMinuts: null
+      valueControlB: null
     };
   },
-  created(){
+  created() {
     this.init();
   },
+
   computed: {
-    // startTime(){
-    //   const value = this.$store.state.inputSlider.valueControlA;
-    //   return this.getTime(value);
-    // },
-    // endTime(){
-    //   const value = this.$store.state.inputSlider.valueControlB;
-    //   return this.getTime(value);
-    // }
+    startTime() {
+      return this.getTime(this.valueStartTime);
+    },
+    endTime() {
+      return this.getTime(this.valueEndTime);
+    }
   },
   methods: {
-    onMy(e){
-      console.log('onMy', e);
+    reset(){
+      setTimeout(() => {
+        this.valueStartTime = null;
+        this.valueEndTime = null;
+        this.valueControlA = null;
+        this.valueControlB = null;
+      }, 100);
     },
-    init(){
-      this.slider = this.$refs.slider;
+    init() {
       this.valueControlA = this.converValuesToPersent(this.start, 1440);
       this.valueControlB = this.converValuesToPersent(this.end, 1440);
-      console.log('this', this);
+      this.valueStartTime = this.start;
+      this.valueEndTime = this.end;
     },
-    change(e){
-      const minuts = this.converTimeStringToMinuts(e.target.value);
-      const persents = this.converValuesToPersent(minuts, 1440);
-      this.$store.dispatch('inputSlider/setControlAValue', persents);
+    changeInputSlider(data) {
+      this.valueStartTime = this.converPersentToValues(
+        data.valueControlA,
+        1440
+      );
+      this.valueEndTime = this.converPersentToValues(data.valueControlB, 1440);
     },
-    getTime(value) {
-      const minuts = this.converPersentToValues(value, 1440)      
+    changeStartTime(e) {
+      let minuts = this.converTimeStringToMinuts(e.target.value);
+      if (minuts > this.valueEndTime) {
+        minuts = this.valueEndTime;
+      }
+      this.valueStartTime = minuts;
+      this.valueControlA = this.converValuesToPersent(minuts, 1440);
+    },
+    changeEndTime(e) {
+      let minuts = this.converTimeStringToMinuts(e.target.value);
+      if (minuts < this.valueStartTime) {
+        minuts = this.valueStartTime;
+      }
+      this.valueEndTime = minuts;
+      this.valueControlB = this.converValuesToPersent(minuts, 1440);
+    },
+    getTime(minuts) {
       let h = parseInt(minuts / 60);
-      let m = parseInt(60 / (100 / ((minuts / 60 - h) * 100)));
-      if(h < 10){
+      let m = parseInt(minuts % 60);
+      if (h < 10) {
         h = `0${h}`;
       }
-      if(m < 10){
+      if (m < 10) {
         m = `0${m}`;
       }
       return `${h}:${m}`;
     },
-    converValuesToPersent(value, maxValue){
-      return (100 / (maxValue / value));
+    converValuesToPersent(value, maxValue) {
+      return 100 / (maxValue / value);
     },
-    converPersentToValues(persents, maxValue){
-      return parseInt(maxValue * (persents / 100));
+    converPersentToValues(persents, maxValue) {
+      return maxValue * (persents / 100);
     },
-    converTimeStringToMinuts(str){
-      const array = str.split(':');
-      const h = parseInt(array[0]);
-      const m = parseInt(array[1]);
-      return h*60 + m;
+    converTimeStringToMinuts(str) {
+      const array = str.split(":");
+      let h = parseInt(array[0]);
+      if (h < 0) {
+        h = 0;
+      }
+      if (h > 24) {
+        h = 24;
+      }
+      let m = parseInt(array[1]);
+      if (m > 59) {
+        m = 59;
+      }
+      if (m < 0) {
+        m = 0;
+      }
+      return h * 60 + m;
     }
   }
 };
 </script>
 
 <style lang="scss">
-.time-slider{
-  &__time-controls{
+.time-slider {
+  &__time-controls {
     position: absolute;
     top: -36px;
     left: 50%;
     transform: translateX(-50%);
   }
 }
-
 </style>
