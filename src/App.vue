@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app them_base">
     <div class="app__aside">
-      <Aside/>
+      <Aside />
     </div>
     <div class="app__content">
       <router-view />
@@ -9,12 +9,12 @@
   </div>
 </template>
 <script>
-import Aside from '@/components/Aside.vue';
+import Aside from "@/components/Aside.vue";
 export default {
   components: {
     Aside
   }
-}
+};
 </script>
 <style lang="scss">
 body {
@@ -25,48 +25,59 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.them{
-  &_base{
-    --lime-color: #4ECE3D;
-    --royal-blue-color: #4A90E2;
-    --dark-color: #4A4A4A;
-    --gray-color: #9B9B9B;
-    --light-gray-color: #E0E0E0;
-    --white-color: #FFFFFF;
-    --dirty-white-color: #F2F2F2;
-    --red-color: #E8191F;
-    --light-red-color: #DC3F43;
-    --sanguina-color: #97040C;
+.them {
+  &_base {
+    --lime-color: #4ece3d;
+    --royal-blue-color: #4a90e2;
+    --dark-color: #4a4a4a;
+    --gray-color: #9b9b9b;
+    --light-gray-color: #e0e0e0;
+    --white-color: #ffffff;
+    --dirty-white-color: #f2f2f2;
+    --red-color: #e8191f;
+    --light-red-color: #dc3f43;
+    --sanguina-color: #97040c;
 
     --shadow-base: rgba(0, 0, 0, 0.5);
   }
 }
 
-.app{
+.app {
   display: flex;
   background: var(--dirty-white-color);
 
-  &__aside{
+  &__aside {
     width: 200px;
   }
 
-  &__content{
+  &__content {
     box-sizing: border-box;
     padding: 24px 54px 38px 100px;
     width: calc(100% - 200px);
   }
 }
-.gag{
+
+.page {
+  &__title {
+    margin: 0 0 20px;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 37px;
+    color: var(--dark-color);
+  }
+}
+
+.gag {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 300px;
 }
 
-.btn{
+.btn {
   display: block;
   cursor: pointer;
-  background: #21D366;
+  background: #21d366;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.1);
@@ -79,33 +90,6 @@ body {
   text-align: center;
   text-transform: uppercase;
   color: var(--white-color);
-}
-
-.time-controls {
-  display: flex;
-  align-items: center;
-
-  &__start,
-  &__end {
-    display: inline-block;
-    box-sizing: border-box;
-    border-radius: 3px;
-    border: 1px solid var(--gray-color);
-    padding: 0;
-    width: 48px;
-    font-size: 13px;
-    line-height: 20px;
-    text-align: center;
-    color: var(--dark-color);
-  }
-  
-  &__spacer {
-    display: block;
-    background-color: var(--dark-color);
-    margin: 0 2px;
-    width: 4px;
-    height: 1px;
-  }
 }
 
 .input-slider {
@@ -124,6 +108,7 @@ body {
 
   &__control-left,
   &__control-right {
+    cursor: pointer;
     background: var(--white-color);
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
     border-radius: 100%;
@@ -150,13 +135,13 @@ body {
     width: 18px;
     height: 18px;
 
-    svg{
+    svg {
       fill: var(--white-color);
       width: 8px;
       height: 6px;
     }
 
-    &.disabled{
+    &.disabled {
       background: none;
       border: 1px solid var(--gray-color);
     }
@@ -206,5 +191,4 @@ body {
     }
   }
 }
-
 </style>

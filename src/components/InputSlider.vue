@@ -68,11 +68,15 @@ export default {
         },
         false
       );
-      window.addEventListener('resize', () => {
-        this.reset();
-      }, false);
+      window.addEventListener(
+        "resize",
+        () => {
+          this.reset();
+        },
+        false
+      );
     },
-    reset(){
+    reset() {
       this.slider = null;
       this.control = null;
       this.controlA = null;

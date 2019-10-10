@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import WorkingHoursItem from '@/components/working-hours/WorkingHoursItem.vue';
+import WorkingHoursItem from '@/components/view-settings/WorkingHoursItem.vue';
 export default {
   components:{
     WorkingHoursItem

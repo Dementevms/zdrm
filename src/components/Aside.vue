@@ -1,82 +1,84 @@
 <template>
   <div class="aside">
     <div class="aside__nav">
-      <div
-        v-for="(item, index) in items"
-        :key="index"
-        class="aside__nav-item"
-      >
+      <div v-for="(item, index) in items" :key="index" class="aside__nav-item">
         <div class="aside__nav-icon">
           <svg :class="[`aside__nav-icon_${item.icon}`]">
-              <use v-bind="{'xlink:href':'#icon-aside-' + item.icon}"/>
+            <use v-bind="{'xlink:href':'#icon-aside-' + item.icon}" />
           </svg>
         </div>
-        <div class="aside__nav-text">{{ item.title }}</div>
+        <div class="aside__nav-text">
+          <router-link :to="item.route">{{ item.title }}</router-link>
+        </div>
       </div>
     </div>
-    <!-- <router-link to="/">Home</router-link> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Aside',
-  data(){
+  name: "Aside",
+  data() {
     return {
       items: [
         {
-          title: 'Dashboard',
-          icon:'dashboard',
-          route: '/dashboard'
+          title: "Dashboard",
+          icon: "dashboard",
+          route: "/"
         },
         {
-          title: 'Customers',
-          icon:'customers',
-          route: '/customers'
+          title: "Customers",
+          icon: "customers",
+          route: "/customers"
         },
         {
-          title: 'Calendar',
-          icon:'calendar',
-          route: '/calendar'
+          title: "Calendar",
+          icon: "calendar",
+          route: "/calendar"
         },
         {
-          title: 'Chats',
-          icon:'chats',
-          route: '/chats'
+          title: "Chats",
+          icon: "chats",
+          route: "/chats"
         },
         {
-          title: 'Tasks',
-          icon:'tasks',
-          route: '/tasks'
+          title: "Tasks",
+          icon: "tasks",
+          route: "/tasks"
         },
         {
-          title: 'Inbox',
-          icon:'inbox',
-          route: '/inbox'
+          title: "Inbox",
+          icon: "inbox",
+          route: "/inbox"
         },
         {
-          title: 'Calls',
-          icon:'calls',
-          route: '/calls'
+          title: "Calls",
+          icon: "calls",
+          route: "/calls"
         },
         {
-          title: 'Leads',
-          icon:'leads',
-          route: '/leads'
+          title: "Leads",
+          icon: "leads",
+          route: "/leads"
         },
         {
-          title: 'Team',
-          icon:'team',
-          route: '/team'
+          title: "Team",
+          icon: "team",
+          route: "/team"
         },
+        {
+          title: "Settings",
+          icon: "settings",
+          route: "/settings"
+        }
       ]
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
-.aside{
+.aside {
   display: block;
   overflow: hidden;
   box-sizing: border-box;
@@ -86,16 +88,16 @@ export default {
   width: 200px;
   height: 100vh;
 
-  &__nav{
+  &__nav {
     margin: 64px 0 0;
   }
 
-  &__nav-item{
+  &__nav-item {
     display: flex;
     align-items: center;
   }
 
-  &__nav-icon{
+  &__nav-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -103,53 +105,58 @@ export default {
     width: 30px;
     height: 30px;
 
-    svg{
+    svg {
       fill: var(--white-color);
     }
 
-    &_dashboard{
-        width: 20px;
-        height: 20px;
-    }
-    &_customers{
-      width: 26px;
-      height: 20px;
-    }
-    &_calendar{
-      width: 22px;
-      height: 23px;
-    }
-    &_chats{
-      width: 24px;
-      height: 23px;
-    }
-    &_tasks{
-      width: 24px;
-      height: 21px;
-    }
-    &_inbox{
-      width: 22px;
-      height: 22px;
-    }
-    &_calls{
-      width: 19px;
-      height: 24px;
-    }
-    &_leads{
+    &_dashboard {
       width: 20px;
       height: 20px;
     }
-    &_team{
+    &_customers {
+      width: 26px;
+      height: 20px;
+    }
+    &_calendar {
+      width: 22px;
+      height: 23px;
+    }
+    &_chats {
+      width: 24px;
+      height: 23px;
+    }
+    &_tasks {
+      width: 24px;
+      height: 21px;
+    }
+    &_inbox {
+      width: 22px;
+      height: 22px;
+    }
+    &_calls {
+      width: 19px;
+      height: 24px;
+    }
+    &_leads {
+      width: 20px;
+      height: 20px;
+    }
+    &_team {
       width: 24px;
       height: 15px;
     }
   }
 
-  &__nav-text{
+  &__nav-text {
     font-size: 16px;
     font-weight: 500;
     line-height: 50px;
     color: var(--white-color);
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
   }
 }
 </style>

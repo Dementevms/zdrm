@@ -1,17 +1,17 @@
 <template>
   <div class="time-slider">
-    <div class="time-slider__time-controls time-controls">
+    <div class="time-slider__controls">
       <input
-        class="time-controls__start"
+        class="time-slider__input"
         v-bind:value="startTime"
         @change="changeStartTime"
         type="text"
       />
-      <div class="time-controls__spacer"></div>
-      <input
-        class="time-controls__start"
-        v-bind:value="endTime"
-        @change="changeEndTime"
+      <div class="time-slider__spacer"></div>
+      <input 
+        class="time-slider__input" 
+        v-bind:value="endTime" 
+        @change="changeEndTime" 
         type="text"
       />
     </div>
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    reset(){
+    reset() {
       setTimeout(() => {
         this.valueStartTime = null;
         this.valueEndTime = null;
@@ -133,11 +133,33 @@ export default {
 
 <style lang="scss">
 .time-slider {
-  &__time-controls {
+  &__controls {
+    display: flex;
+    align-items: center;
     position: absolute;
     top: -36px;
     left: 50%;
     transform: translateX(-50%);
+  }
+  &__input {
+    display: inline-block;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid var(--gray-color);
+    padding: 0;
+    width: 48px;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+    color: var(--dark-color);
+  }
+
+  &__spacer {
+    display: block;
+    background-color: var(--dark-color);
+    margin: 0 2px;
+    width: 4px;
+    height: 1px;
   }
 }
 </style>
